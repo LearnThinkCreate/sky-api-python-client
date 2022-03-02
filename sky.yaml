@@ -1,0 +1,12 @@
+name: sky
+channels: 
+  - conda-forge
+dependencies:
+  - python=3.9
+  - python-dotenv
+  - pandas
+  - authlib
+  - requests
+  - pip
+  - pip:
+    - python-dotenv
