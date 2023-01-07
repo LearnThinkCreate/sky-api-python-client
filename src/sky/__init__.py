@@ -1,5 +1,3 @@
-"""
-"""
 from .sky import Sky
 from .utils import authorizationApp, cleanAdvancedList, isActiveTerm
 
