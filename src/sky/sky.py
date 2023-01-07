@@ -495,15 +495,12 @@ class Sky:
         Returns:
             A pandas dataframe of the advanced list
         """
-        # Calling api to get raw list data
-        raw_list = self.get(endpoint=f"legacy/lists/{list_id}", raw_data=True)
-        return print(raw_list)
-
+        # Calling api to get raw list data (Updated the URL as of 1/1/23)
+        raw_list = self.get(endpoint=f"lists/advanced/{list_id}", raw_data=True)
         # Type casting the data to a dataframe
 
-        """Uncomment the next 2 lines after testing is complete"""
-        # data = pd.json_normalize(raw_list["rows"], "columns").reset_index()
-        # return cleanAdvancedList(data)
+        data = pd.json_normalize(raw_list["rows"], "columns").reset_index()
+        return cleanAdvancedList(data)
 
     def _loadCachedToken(self) -> Union[None, OAuth2Token]:
         """Load Sky API token from cache"""
