@@ -499,7 +499,7 @@ class Sky:
         raw_list = self.get(endpoint=f"lists/advanced/{list_id}", raw_data=True)
         # Type casting the data to a dataframe
 
-        data = pd.json_normalize(raw_list["rows"], "columns").reset_index()
+        data = pd.json_normalize(raw_list["results"]["rows"], "columns").reset_index()
         return cleanAdvancedList(data)
 
     def _loadCachedToken(self) -> Union[None, OAuth2Token]:
