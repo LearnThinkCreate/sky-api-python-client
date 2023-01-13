@@ -496,11 +496,38 @@ class Sky:
             A pandas dataframe of the advanced list
         """
         # Calling api to get raw list data (Updated the URL as of 1/1/23)
-        raw_list = self.get(endpoint=f"lists/advanced/{list_id}", raw_data=True)
+        # raw_list = {}
+        # try:
+        #     raw_list += self.get(endpoint=f"lists/advanced/{list_id}", raw_data=True)
+        # except KeyError:
+        #     print("Fail")
         # Type casting the data to a dataframe
 
-        data = pd.json_normalize(raw_list["results"]["rows"], "columns").reset_index()
-        return cleanAdvancedList(data)
+        # A list to hold all dataframes for queries longer than 1000 rows
+        main = []
+
+        # Run through ~20 pages, which will equate to 20,000 rows max
+        for i in range(1, 21):
+            temp = []
+            val = self.get(endpoint=f"lists/advanced/{list_id}?page={i}", raw_data=True)
+            temp.append(val)
+
+            # If a match is found, break. This will prevent duplicate
+            # data for queries < 1000 rows.
+            if i > 1 and val == temp[i - 2]:
+                break
+            else:
+                main.append(
+                    pd.json_normalize(val["results"]["rows"], "columns").reset_index()
+                )
+
+        # If there's only one dataframe, return it
+        if len(main) < 2:
+            return cleanAdvancedList(main[0])
+        # Concat the list of dataframes together
+        else:
+            data = pd.concat(main, ignore_index=True)
+            return cleanAdvancedList(data)
 
     def _loadCachedToken(self) -> Union[None, OAuth2Token]:
         """Load Sky API token from cache"""
