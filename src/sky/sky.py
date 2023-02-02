@@ -507,8 +507,8 @@ class Sky:
         main = []
 
         # Run through ~20 pages, which will equate to 20,000 rows max
+        temp = []
         for i in range(1, 21):
-            temp = []
             val = self.get(endpoint=f"lists/advanced/{list_id}?page={i}", raw_data=True)
             temp.append(val)
 
