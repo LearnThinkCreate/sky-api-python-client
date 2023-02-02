@@ -505,16 +505,12 @@ class Sky:
 
         # A list to hold all dataframes for queries longer than 1000 rows
         main = []
-
-        # Run through ~20 pages, which will equate to 20,000 rows max
-        for i in range(1, 21):
-            temp = []
+        
+        # Run through ~100 pages, which will equate to 100,000 rows max
+        for i in range(1, 101):
             val = self.get(endpoint=f"lists/advanced/{list_id}?page={i}", raw_data=True)
-            temp.append(val)
 
-            # If a match is found, break. This will prevent duplicate
-            # data for queries < 1000 rows.
-            if i > 1 and val == temp[i - 2]:
+            if val['count'] == 0:
                 break
             else:
                 main.append(
